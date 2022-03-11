@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import Routes from './App/Navigation/Route';
 
