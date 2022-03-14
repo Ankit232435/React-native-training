@@ -1,18 +1,14 @@
-import React from 'react'
-import ChatScreen from '../View/Chat/ChatScreen'
+import React from 'react';
+import ChatScreen from '../View/Chat/ChatScreen';
 
 interface inputProps { 
   navigation:any;
-  route:any
+  route:any;
 }
 
-const ChatVIewModel = (props:inputProps) => {
-
+const ChatViewModel = (props:inputProps) => {
   const {navigation,route} = props
-
   const newProps = {navigation,route}
-
-
   return (
    <ChatScreen
    {...newProps}
@@ -20,4 +16,4 @@ const ChatVIewModel = (props:inputProps) => {
   )
 }
 
-export default ChatVIewModel
+export default ChatViewModel;

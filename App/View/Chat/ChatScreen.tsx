@@ -1,5 +1,5 @@
-import React, {useCallback, useState, useLayoutEffect, useEffect} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import React, {useCallback, useState, useLayoutEffect, useEffect,} from 'react';
+import {View, Text, TouchableOpacity,Alert} from 'react-native';
 import {auth, db} from '../../../firebase';
 import {signOut} from 'firebase/auth';
 import {
@@ -10,7 +10,7 @@ import {
   orderBy,
   onSnapshot,
 } from 'firebase/firestore';
-import {GiftedChat} from 'react-native-gifted-chat';
+import {GiftedChat, IMessage} from 'react-native-gifted-chat';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 
@@ -26,7 +26,7 @@ const ChatScreen = (newProps: inputProps) => {
 
   console.log("data",data)
 
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<any>([]);
   const signOutNow = () => {
     signOut(auth)
       .then(() => {
@@ -87,7 +87,7 @@ const ChatScreen = (newProps: inputProps) => {
 
   const onSend = useCallback((messages = []) => {
     console.log('msg', messages);
-    setMessages(previousMessages =>
+    setMessages((previousMessages: IMessage[] | undefined) =>
       GiftedChat.append(previousMessages, messages),
     );
     const {_id, createdAt, text, user} = messages[0];
@@ -137,12 +137,12 @@ const ChatScreen = (newProps: inputProps) => {
           showAvatarForEveryMessage={true}
           onSend={messages => onSend(messages)}
           user={{
-            _id: auth?.currentUser?.email,
-            name: auth?.currentUser?.displayName,
-            avatar: auth?.currentUser?.photoURL,
+            _id: auth?.currentUser?.email||'',
+            name: auth?.currentUser?.displayName||'',
+            avatar: auth?.currentUser?.photoURL||'',
           }}
-          onLongPressAvatar={()=>alert("hii")}
-          //isTyping={true}
+          onLongPressAvatar={()=>Alert.alert("hii")}
+          isTyping={true}
         />
       </View>
     </SafeAreaView>

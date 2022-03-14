@@ -3,10 +3,6 @@ import LoginScreen from '../View/Login/LoginScreen';
 
 interface inputProps {
   navigation: any;
-  name:string;
-  setName:()=>void;
-  pass:number;
-  setPass:()=>void;
   route:any;
 }
 

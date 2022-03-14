@@ -2,15 +2,22 @@ import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {
-  ChatVIewModel,
+  ChatViewModel,
   LoginViewModel,
   RegisterViewModel,
   SplashViewModel,
-} from '../ViewModel';
+} from '../ViewModels';
 
-const Stack = createStackNavigator();
+type StackProps={
+  Splash : Function;
+  Login:Function;
+  Register: Function;
+  Chat:Function;
+}
 
-function Routes() {
+const Stack = createStackNavigator<StackProps>();
+
+const StackNav=()=> {
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -21,10 +28,10 @@ function Routes() {
         <Stack.Screen name="Splash" component={SplashViewModel} />
         <Stack.Screen name="Login" component={LoginViewModel} />
         <Stack.Screen name="Register" component={RegisterViewModel} />
-        <Stack.Screen name="Chat" component={ChatVIewModel} />
+        <Stack.Screen name="Chat" component={ChatViewModel} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-export default Routes;
+export default StackNav;

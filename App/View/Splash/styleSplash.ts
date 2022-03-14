@@ -10,9 +10,6 @@ export default StyleSheet.create({
     },
     btnContainer:{
         flex:0.3,
-        
-        //  backgroundColor:'red',
-        //justifyContent:'space-evenly',
         alignItems:'center'
     },
     signInBtn:{
@@ -23,7 +20,6 @@ export default StyleSheet.create({
         justifyContent:'center',
         backgroundColor:'rgb(245,125,70)',
         marginTop:60
-        //alignSelf:'center'
     },
     txtSignin:{
         fontWeight:'800',

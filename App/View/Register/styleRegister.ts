@@ -1,6 +1,9 @@
 import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
+  container:{
+    flex:1
+  },
   parentContainer: {
     flex: 1,
     backgroundColor: 'aliceblue',
@@ -38,7 +41,6 @@ signInBtn:{
     //backgroundColor:'rgb(25,30,150)',
     marginTop:100,
     
-    //alignSelf:'center'
 },
 txtSignin:{
     fontWeight:'800',

@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
+    container:{
+        flex:1
+    },
     parentContainer:{
         flex:1,
-        //backgroundColor:'rgb(230,10,55)',
-
         backgroundColor:'aliceblue'
     },
     uprContainer:{
@@ -14,7 +15,7 @@ export default StyleSheet.create({
         flex:0.6,
         width:"90%",
         alignSelf:'center',
-        //backgroundColor:'pink'
+        
     },
     placeholderStyle:{
         width:'100%',
@@ -38,10 +39,9 @@ export default StyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         backgroundColor:'rgb(245,125,70)',
-        //backgroundColor:'rgb(25,30,150)',
         marginTop:150,
         
-        //alignSelf:'center'
+        
     },
     txtSignin:{
         fontWeight:'800',

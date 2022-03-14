@@ -5,20 +5,22 @@ import {
   SafeAreaView,
   TextInput,
   TouchableOpacity,
-  Animated
+  Animated,
+  Alert
 } from 'react-native';
 import LottieView from 'lottie-react-native';
 import style from './styleLogin';
 import { auth } from '../../../firebase';
 import { signInWithEmailAndPassword,createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { LOTTIE, STRINGS } from '../../Constants';
 
 
 interface inputProps {
   navigation: any;
   name:string;
-  setName:()=>void;
-  pass:number
-  setPass:()=>void;
+  setName:(item:string)=>void;
+  pass:string
+  setPass:(item:string)=>void;
   route:any
 }
 
@@ -37,21 +39,19 @@ const LoginScreen = (newProps: inputProps) => {
 
     const register = async () => {
 
-
-
       try {
         let response = await signInWithEmailAndPassword(auth,name, pass)
         if (response && response.user) {
           console.log("res",response)
-          let data = response?.user?.auth
+          let data = response?.user
           console.log("data",data)
 
           navigation.navigate('Chat',{
             data:data
           })
-          alert("Success ✅", "Authenticated successfully")
+          Alert.alert("Success ✅", "Authenticated successfully")
         }
-      } catch (e) {
+      } catch (e :any) {
         console.error(e.message)
       }
     }
@@ -86,40 +86,39 @@ const LoginScreen = (newProps: inputProps) => {
 
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={style.container}>
       <View style={style.parentContainer}>
         <View style={style.uprContainer}>
           <LottieView
-            source={require('../../Assests/Lottie/login.json')}
+            source={LOTTIE.login}
             autoPlay
             loop
           />
         </View>
         <Animated.View style={[style.lwrContainer,{opacity:position}]}>
-          <Text style={style.txtUsername}>Username</Text>
+          <Text style={style.txtUsername}>{STRINGS.userName}</Text>
           <TextInput
-            placeholder={'enter name'}
+            placeholder={STRINGS.enterName}
             onChangeText={(txt)=>setName(txt)}
             style={style.placeholderStyle}
           />
-          <Text style={style.txtUsername}>Password</Text>
+          <Text style={style.txtUsername}>{STRINGS.password}</Text>
           <TextInput
-            placeholder={'enter password'}
+            placeholder={STRINGS.enterPassword}
             onChangeText={(txt)=>setPass(txt)}
             style={style.placeholderStyle}
           />
           <TouchableOpacity 
           onPress={()=>register()}
           style={style.signInBtn}>
-            <Text style={style.txtSignin}>Login</Text>
+            <Text style={style.txtSignin}>{STRINGS.logIn}</Text>
           </TouchableOpacity>
           <Text style={style.txtDont}>
-            Do not have account?
+            {STRINGS.doNotHaveAccount}
             <Text
               onPress={() => navigation.navigate('Register')}
               style={style.txtSignup}>
-              {' '}
-              Sign Up
+              {STRINGS.signUp}
             </Text>
           </Text>
       </Animated.View>
