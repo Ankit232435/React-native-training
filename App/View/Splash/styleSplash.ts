@@ -19,15 +19,18 @@ export default StyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         backgroundColor:'rgb(245,125,70)',
-        marginTop:60
+         marginTop:20
     },
     txtSignin:{
-        fontWeight:'800',
+        fontSize:18,
+        fontWeight:'600',
         color:'white'
     },
     txtSignin1:{
-        color:'rgb(245,125,70)',
-        fontWeight:'800'
+        color:'rgb(245,125,50)',
+        fontSize:18,
+        fontWeight:'600',
+        
 
     },
     signUpBtn:{
@@ -41,8 +44,9 @@ export default StyleSheet.create({
 
     },
     txtnotacc:{
-        fontWeight:'800',
-        color:'white',
+        fontSize:18,
+        fontWeight:'600',
+        color:'white'
 
     }
 })

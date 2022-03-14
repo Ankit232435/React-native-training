@@ -117,8 +117,7 @@ const LoginScreen = (newProps: inputProps) => {
             {STRINGS.doNotHaveAccount}
             <Text
               onPress={() => navigation.navigate('Register')}
-              style={style.txtSignup}>
-              {STRINGS.signUp}
+              style={style.txtSignup}> {STRINGS.signUp}
             </Text>
           </Text>
       </Animated.View>

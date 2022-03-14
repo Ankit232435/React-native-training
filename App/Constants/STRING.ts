@@ -7,7 +7,7 @@ const STRINGS ={
     password:'Password',
     enterPassword:'Enter Password',
     logIn:'Log In',
-    doNotHaveAccount:'DO Not Have Account?',
+    doNotHaveAccount:'Do Not Have Account?',
     email:'Email',
     enterEmail:'Enter Email',
     register:'Register',

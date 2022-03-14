@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {View, Text, Animated, TouchableOpacity} from 'react-native';
+import {View, Text, Animated, TouchableOpacity, StatusBar} from 'react-native';
 import LottieView from 'lottie-react-native';
 import styles from './styleSplash';
 import {LOTTIE, STRINGS} from '../../Constants/index';
@@ -26,6 +26,7 @@ const SplashScreen = (props: inputProps) => {
 
   return (
     <View style={styles.parentContainer}>
+      <StatusBar backgroundColor={'rgb(245,125,70)'}/>
       <View style={styles.gifStyle}>
         <LottieView
           source={LOTTIE.chat}
@@ -69,7 +70,7 @@ const SplashScreen = (props: inputProps) => {
           <TouchableOpacity onPress={() => navigation.navigate('Register')}>
             <Text style={styles.txtnotacc}>
               {STRINGS.noAccountYet}
-              <Text style={styles.txtSignin1}>{STRINGS.signUp}</Text>
+              <Text style={styles.txtSignin1}> {STRINGS.signUp}</Text>
             </Text>
           </TouchableOpacity>
         </Animated.View>

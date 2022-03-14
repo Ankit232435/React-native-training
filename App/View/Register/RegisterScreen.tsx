@@ -38,13 +38,13 @@ const RegisterScreen = (newProps: inputProps) => {
             style={style.placeholderStyle}
           />
           <TouchableOpacity style={style.signInBtn}>
-            <Text style={style.txtSignin}>{STRINGS.register}</Text>
+              <Text style={style.txtSignin}>{STRINGS.register}</Text>
           </TouchableOpacity>
           <Text style={style.txtDont}>
             {STRINGS.alreadyHaveAccount}
             <Text 
             onPress={()=>navigation.navigate('Login')}
-            style={style.txtSignup}>{STRINGS.signIn}</Text>
+            style={style.txtSignup}> {STRINGS.signIn}</Text>
           </Text>
 
         </View>
