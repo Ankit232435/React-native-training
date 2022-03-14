@@ -19,11 +19,13 @@ interface inputProps {
   setName:()=>void;
   pass:number
   setPass:()=>void;
+  route:any
 }
 
-const LoginScreen = (newProps: any) => {
-    const {navigation,name,setName,pass,setPass} = newProps;
-// const pos = new Animated.Value(0)
+const LoginScreen = (newProps: inputProps) => {
+    const {navigation,name,setName,pass,setPass,route} = newProps;
+
+    console.log("route",route)
 
     const position = useRef(new Animated.Value(0)).current
 
@@ -35,15 +37,18 @@ const LoginScreen = (newProps: any) => {
 
     const register = async () => {
 
-      // console.log("name",name,pass)
 
-    //  let name = 'ankit221@gmail.com'
-    //  let pass = 222222
 
       try {
         let response = await signInWithEmailAndPassword(auth,name, pass)
         if (response && response.user) {
           console.log("res",response)
+          let data = response?.user?.auth
+          console.log("data",data)
+
+          navigation.navigate('Chat',{
+            data:data
+          })
           alert("Success ✅", "Authenticated successfully")
         }
       } catch (e) {
@@ -51,28 +56,6 @@ const LoginScreen = (newProps: any) => {
       }
     }
 
-    // const register = () => {
-    //   console.log("auth",auth)
-    //     auth.createUserWithEmailAndPassword(name, pass)
-    //         .then((userCredential) => {
-    //             // Signed in 
-    //             var user = userCredential.user;
-    //             // ...
-    //             user.updateProfile({
-    //                 displayName: name,
-    //                 photoUrl: avatar ? avatar : "https://gravatar.com/avatar/94d45dbdba988afacf30d916e7aaad69?s=200&d=mp&r=x",
-    //             })
-    //                 .catch((error) => {
-    //                     alert(error.message)
-    //                 })
-    //         })
-    //         .catch((error) => {
-    //             var errorCode = error.code;
-    //             var errorMessage = error.message;
-    //             // ..
-    //             alert(errorMessage);
-    //         });
-    // }
 
     // const register = () => {
     //   let avatar = ""
@@ -87,6 +70,7 @@ const LoginScreen = (newProps: any) => {
     //         })
     //         .then(() => {
     //             alert('Registered, please login.');
+
     //         })
     //         .catch((error) => {
     //             alert(error.message);

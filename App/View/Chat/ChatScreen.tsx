@@ -13,8 +13,18 @@ import {
 import {GiftedChat} from 'react-native-gifted-chat';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-const ChatScreen = (newProps: any) => {
-  const {navigation} = newProps;
+
+interface inputProps {
+    navigation:any;
+    route:any
+}
+
+const ChatScreen = (newProps: inputProps) => {
+  const {navigation,route} = newProps;
+
+  const {data} = route.params
+
+  console.log("data",data)
 
   const [messages, setMessages] = useState([]);
   const signOutNow = () => {
@@ -76,7 +86,7 @@ const ChatScreen = (newProps: any) => {
   }, [navigation]);
 
   const onSend = useCallback((messages = []) => {
-      console.log("msg",messages)
+    console.log('msg', messages);
     setMessages(previousMessages =>
       GiftedChat.append(previousMessages, messages),
     );
@@ -100,28 +110,41 @@ const ChatScreen = (newProps: any) => {
     ]);
   }, []);
 
+
+
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View style={{flex: 0.05, backgroundColor: 'ghostwhite',alignItems:'flex-end'}}>
-          <TouchableOpacity 
-          onPress={()=>signOutNow()}
-          style={{height:40,width:50,backgroundColor:'red',justifyContent:'center'}}
-          >
-        <Text>signout</Text>
+      <View
+        style={{
+          flex: 0.05,
+          backgroundColor: 'ghostwhite',
+          alignItems: 'flex-end',
+        }}>
+        <TouchableOpacity
+          onPress={() => signOutNow()}
+          style={{
+            height: 40,
+            width: 50,
+            backgroundColor: 'red',
+            justifyContent: 'center',
+          }}>
+          <Text>signout</Text>
         </TouchableOpacity>
       </View>
       <View style={{flex: 0.95, backgroundColor: 'lightgrey'}}>
-          <GiftedChat
-            messages={messages.reverse()}
-            showAvatarForEveryMessage={true}
-            onSend={messages => onSend(messages)}
-            user={{
-              _id: auth?.currentUser?.email,
-              name: auth?.currentUser?.displayName,
-              avatar: auth?.currentUser?.photoURL,
-            }}
-          />
-        </View>
+        <GiftedChat
+          messages={messages.reverse()}
+          showAvatarForEveryMessage={true}
+          onSend={messages => onSend(messages)}
+          user={{
+            _id: auth?.currentUser?.email,
+            name: auth?.currentUser?.displayName,
+            avatar: auth?.currentUser?.photoURL,
+          }}
+          onLongPressAvatar={()=>alert("hii")}
+          //isTyping={true}
+        />
+      </View>
     </SafeAreaView>
   );
 };
