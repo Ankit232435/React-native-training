@@ -137,9 +137,9 @@ const ChatScreen = (newProps: inputProps) => {
           showAvatarForEveryMessage={true}
           onSend={messages => onSend(messages)}
           user={{
-            _id: auth?.currentUser?.email,
-            name: auth?.currentUser?.displayName,
-            avatar: auth?.currentUser?.photoURL,
+            _id: auth?.currentUser?.email || "",
+            name: auth?.currentUser?.displayName || undefined,
+            avatar: auth?.currentUser?.photoURL || undefined,
           }}
           onLongPressAvatar={()=>alert("hii")}
           //isTyping={true}
