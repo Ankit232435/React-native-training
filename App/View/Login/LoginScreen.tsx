@@ -1,136 +1,106 @@
-import React, { useRef } from 'react';
+import React, {useRef} from 'react';
 import {
   View,
   Text,
   SafeAreaView,
   TextInput,
   TouchableOpacity,
-  Animated
+  Animated,
+  Alert,
 } from 'react-native';
 import LottieView from 'lottie-react-native';
 import style from './styleLogin';
-import { auth } from '../../../firebase';
-import { signInWithEmailAndPassword,createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import {auth} from '../../../firebase';
+import {
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
 
+import {LOTTIE, STRINGS} from '../../Constants';
+import { useSelector,useDispatch } from 'react-redux';
+import { SaveData } from '../../Redux/Actions/ActionCreators';
 
 interface inputProps {
   navigation: any;
-  name:string;
-  setName:()=>void;
-  pass:number
-  setPass:()=>void;
-  route:any
+  name: string;
+  setName: (item: string) => void;
+  pass: string;
+  setPass: (item: string) => void;
+  route: any;
 }
 
 const LoginScreen = (newProps: inputProps) => {
-    const {navigation,name,setName,pass,setPass,route} = newProps;
+  const {navigation, name, setName, pass, setPass, route} = newProps;
 
-    console.log("route",route)
+  console.log('route', route);
 
-    const position = useRef(new Animated.Value(0)).current
+const data = useSelector((state:any)=>state.count)
+const Dispatch = useDispatch()
+console.log("data",data)
 
-    Animated.timing(position,{
-        toValue:2,
-        useNativeDriver:true,
-        duration:2000
-    }).start()
+  const position = useRef(new Animated.Value(0)).current;
 
-    const register = async () => {
+  
 
+  Animated.timing(position, {
+    toValue: 2,
+    useNativeDriver: true,
+    duration: 2000,
+  }).start();
 
+  const register = async () => {
+    try {
+      let response = await signInWithEmailAndPassword(auth, name, pass);
+      if (response && response.user) {
+        console.log('res', response);
+        let data = {email:response?.user?.email,uid:response?.user?.uid};
+        console.log('data', data);
 
-      try {
-        let response = await signInWithEmailAndPassword(auth,name, pass)
-        if (response && response.user) {
-          console.log("res",response)
-          let data = response?.user?.auth
-          console.log("data",data)
-
-          navigation.navigate('Chat',{
-            data:data
-          })
-          alert("Success ✅", "Authenticated successfully")
-        }
-      } catch (e) {
-        console.error(e.message)
+        navigation.navigate('Customtab', {
+          data: data,
+        });
+        Dispatch(SaveData(data))
+        Alert.alert('Success ✅', 'Authenticated successfully');
       }
+    } catch (e: any) {
+      console.error(e.message);
     }
-
-
-    // const register = () => {
-    //   let avatar = ""
-    //   createUserWithEmailAndPassword(auth, name, pass)
-    //     .then((userCredential) => {
-    //         // Registered
-    //         const user = userCredential.user;
-    //         console.log("usser",user)
-    //         updateProfile(user, {
-    //             displayName: name,
-    //             photoURL: avatar ? avatar : 'https://gravatar.com/avatar/94d45dbdba988afacf30d916e7aaad69?s=200&d=mp&r=x',
-    //         })
-    //         .then(() => {
-    //             alert('Registered, please login.');
-
-    //         })
-    //         .catch((error) => {
-    //             alert(error.message);
-    //         })
-    //     })
-    //     .catch((error) => {
-    //         const errorCode = error.code;
-    //         const errorMessage = error.message;
-    //         alert(errorMessage);
-    //     });
-    // }
-   
-
+  };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={style.container}>
       <View style={style.parentContainer}>
         <View style={style.uprContainer}>
-          <LottieView
-            source={require('../../Assests/Lottie/login.json')}
-            autoPlay
-            loop
-          />
+          <LottieView source={LOTTIE.login} autoPlay loop />
         </View>
-        <Animated.View style={[style.lwrContainer,{opacity:position}]}>
-          <Text style={style.txtUsername}>Username</Text>
+        <Animated.View style={[style.lwrContainer, {opacity: position}]}>
+          <Text style={style.txtUsername}>{STRINGS.userName}</Text>
           <TextInput
-            placeholder={'enter name'}
-            onChangeText={(txt)=>setName(txt)}
+            placeholder={STRINGS.enterName}
+            onChangeText={txt => setName(txt)}
             style={style.placeholderStyle}
           />
-          <Text style={style.txtUsername}>Password</Text>
+          <Text style={style.txtUsername}>{STRINGS.password}</Text>
           <TextInput
-            placeholder={'enter password'}
-            onChangeText={(txt)=>setPass(txt)}
+            placeholder={STRINGS.enterPassword}
+            onChangeText={txt => setPass(txt)}
             style={style.placeholderStyle}
           />
-          <TouchableOpacity 
-          onPress={()=>register()}
-          style={style.signInBtn}>
-            <Text style={style.txtSignin}>Login</Text>
+          <TouchableOpacity onPress={() => register()} style={style.signInBtn}>
+            <Text style={style.txtSignin}>{STRINGS.logIn}</Text>
           </TouchableOpacity>
           <Text style={style.txtDont}>
-            Do not have account?
+            {STRINGS.doNotHaveAccount}
             <Text
               onPress={() => navigation.navigate('Register')}
               style={style.txtSignup}>
               {' '}
-              Sign Up
+              {STRINGS.signUp}
             </Text>
           </Text>
-      </Animated.View>
-        </View>
+        </Animated.View>
+      </View>
     </SafeAreaView>
   );
 };
 
 export default LoginScreen;
-
-
-
-
-

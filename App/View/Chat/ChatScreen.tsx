@@ -1,32 +1,48 @@
-import React, {useCallback, useState, useLayoutEffect, useEffect} from 'react';
+import React, {useCallback, useState, useLayoutEffect, useEffect,} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {auth, db} from '../../../firebase';
 import {signOut} from 'firebase/auth';
 import {
   collection,
   addDoc,
-  getDocs,
   query,
   orderBy,
   onSnapshot,
 } from 'firebase/firestore';
-import {GiftedChat} from 'react-native-gifted-chat';
+import {GiftedChat, IMessage} from 'react-native-gifted-chat';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import styles from './styleChat'
+import { useSelector } from 'react-redux';
+ import  firestore  from '@react-native-firebase/firestore'
+
+
+import uuid from 'react-native-uuid';
 
 
 interface inputProps {
     navigation:any;
-    route:any
+    route:any,
+    uid:any
 }
 
 const ChatScreen = (newProps: inputProps) => {
-  const {navigation,route} = newProps;
+  const {navigation,route,uid} = newProps;
 
-  const {data} = route.params
+  const {name} = route.params
 
-  console.log("data",data)
+  const user =  useSelector((state:any)=>state.data)
 
-  const [messages, setMessages] = useState([]);
+  // console.log("name",name)
+  // console.log("user",user)
+
+  let dbName = name + " " +  user
+
+  // const {email,id} = user
+
+  console.log("dbname",user)
+
+
+  const [messages, setMessages] = useState<any>([]);
   const signOutNow = () => {
     signOut(auth)
       .then(() => {
@@ -68,7 +84,10 @@ const ChatScreen = (newProps: inputProps) => {
       ),
     });
 
-    const q = query(collection(db, 'chats'), orderBy('createdAt'));
+ 
+
+
+    const q = query(collection(db, dbName), orderBy('id'));
     const unsubscribe = onSnapshot(q, snapshot =>
       setMessages(
         snapshot.docs.map(doc => ({
@@ -86,13 +105,47 @@ const ChatScreen = (newProps: inputProps) => {
   }, [navigation]);
 
   const onSend = useCallback((messages = []) => {
-    console.log('msg', messages);
-    setMessages(previousMessages =>
-      GiftedChat.append(previousMessages, messages),
-    );
-    const {_id, createdAt, text, user} = messages[0];
 
-    addDoc(collection(db, 'chats'), {_id, createdAt, text, user});
+    // const id = uuid.v4(); // ⇨ '11edc52b-2918-4d71-9058-f7285e29d894'
+    // console.log('roomid', id);
+
+    // addDoc(collection(db,dbName),{})
+
+
+
+    // console.log('msg', messages);
+    // setMessages((previousMessages: IMessage[] | undefined) =>
+   
+    // const {_id, createdAt, text, user} = messages[0];
+
+    // addDoc(collection(db, dbName), {_id, createdAt,id ,text, user});
+
+
+    const msg = messages[0]
+
+    const tempMsg = {
+      ...msg,
+      sentBy:user.uid,
+      sentForm:uid,
+      createdAt:new Date()
+    }
+
+      setMessages((previousMessages : IMessage[] | undefined ) => GiftedChat.append(previousMessages,tempMsg))
+    const docId = uid > user.uid ? user.uid + "-" + uid : uid + "-"+ user.uid
+      // firestore().collection('chatrooms')
+      // .doc(docId)
+      // .collection('messages')
+      // .add(tempMsg)
+          const {_id, createdAt, text, user} = messages[0];
+
+
+          addDoc(collection(db, "messages"), { _id,createdAt,text, user,    sentBy:user.uid,
+            sentForm:uid,
+            createdAt:new Date()});
+
+
+    console.log("msg",msg)
+
   }, []);
 
   useEffect(() => {
@@ -113,36 +166,18 @@ const ChatScreen = (newProps: inputProps) => {
 
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <View
-        style={{
-          flex: 0.05,
-          backgroundColor: 'ghostwhite',
-          alignItems: 'flex-end',
-        }}>
-        <TouchableOpacity
-          onPress={() => signOutNow()}
-          style={{
-            height: 40,
-            width: 50,
-            backgroundColor: 'red',
-            justifyContent: 'center',
-          }}>
-          <Text>signout</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={{flex: 0.95, backgroundColor: 'lightgrey'}}>
+    <SafeAreaView style={styles.parentContainer}>
+      <View style={styles.childContainer}>
         <GiftedChat
           messages={messages.reverse()}
           showAvatarForEveryMessage={true}
           onSend={messages => onSend(messages)}
           user={{
-            _id: auth?.currentUser?.email || "",
-            name: auth?.currentUser?.displayName || undefined,
-            avatar: auth?.currentUser?.photoURL || undefined,
+            _id: auth?.currentUser?.email||'',
+            name: auth?.currentUser?.displayName||'',
+            avatar: auth?.currentUser?.photoURL||'',
           }}
-          onLongPressAvatar={()=>alert("hii")}
-          //isTyping={true}
+          isTyping={true}
         />
       </View>
     </SafeAreaView>

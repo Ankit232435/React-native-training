@@ -1,22 +1,14 @@
-
-
 import React from 'react';
-import Routes from './App/Navigation/Route';
-
-import {LogBox} from 'react-native';
-
-LogBox.ignoreLogs([
-  "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
-]);
+import {Provider} from 'react-redux';
+import MainApp from './App/Navigation';
+import Store from './App/Redux/Store';
 
 const App = () => {
- 
-
   return (
-   <Routes/>
+    <Provider store={Store}>
+      <MainApp />
+    </Provider>
   );
 };
-
-
 
 export default App;

@@ -1,15 +1,14 @@
 import React, {useRef} from 'react';
-import {View, Text, Animated, TouchableOpacity} from 'react-native';
+import {View, Text, Animated, TouchableOpacity, StatusBar} from 'react-native';
 import LottieView from 'lottie-react-native';
-import style from './styleSplash';
-
+import styles from './styleSplash';
+import {LOTTIE, STRINGS} from '../../Constants/index';
 interface inputProps {
   navigation: any;
 }
 
-const SplashScreen = (newProps: inputProps) => {
-  const {navigation} = newProps;
-
+const SplashScreen = (props: inputProps) => {
+  const {navigation} = props;
   const position = useRef(new Animated.Value(-1)).current;
   const position1 = useRef(new Animated.Value(1)).current;
 
@@ -26,18 +25,15 @@ const SplashScreen = (newProps: inputProps) => {
   }).start();
 
   return (
-    <View style={style.parentContainer}>
-      <View style={style.gifStyle}>
-        <LottieView
-          source={require('../../Assests/Lottie/chat.json')}
-          autoPlay
-          loop
-        />
+    <View style={styles.parentContainer}>
+      <StatusBar backgroundColor={'rgb(245,125,70)'} />
+      <View style={styles.gifStyle}>
+        <LottieView source={LOTTIE.chat} autoPlay loop />
       </View>
-      <View style={style.btnContainer}>
+      <View style={styles.btnContainer}>
         <Animated.View
           style={[
-            style.signInBtn,
+            styles.signInBtn,
             {
               transform: [
                 {
@@ -50,12 +46,12 @@ const SplashScreen = (newProps: inputProps) => {
             },
           ]}>
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={style.txtSignin}>Go to Sign In</Text>
+            <Text style={styles.txtSignin}>{STRINGS.goToSignIn}</Text>
           </TouchableOpacity>
         </Animated.View>
         <Animated.View
           style={[
-            style.signUpBtn,
+            styles.signUpBtn,
             {
               transform: [
                 {
@@ -68,9 +64,9 @@ const SplashScreen = (newProps: inputProps) => {
             },
           ]}>
           <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-            <Text style={style.txtnotacc}>
-              Not account yet?
-              <Text style={style.txtSignin1}> Sign up</Text>
+            <Text style={styles.txtnotacc}>
+              {STRINGS.noAccountYet}
+              <Text style={styles.txtSignin1}> {STRINGS.signUp}</Text>
             </Text>
           </TouchableOpacity>
         </Animated.View>

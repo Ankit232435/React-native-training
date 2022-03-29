@@ -1,6 +1,9 @@
 import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
+  container:{
+    flex:1
+  },
   parentContainer: {
     flex: 1,
     backgroundColor: 'aliceblue',
@@ -15,8 +18,7 @@ export default StyleSheet.create({
   },
   placeholderStyle:{
     width:'100%',
-    height:"10%",
-    borderWidth:1.5,
+    borderWidth:2,
     borderColor:'rgb(245,125,70)',
     alignSelf:'center',
     backgroundColor:'ghostwhite',
@@ -26,7 +28,8 @@ export default StyleSheet.create({
 },
 txtUsername:{
     fontWeight:'600',
-    paddingVertical:10
+    paddingVertical:10,
+    
 },
 signInBtn:{
     height:'10%',
@@ -36,21 +39,23 @@ signInBtn:{
     justifyContent:'center',
     backgroundColor:'rgb(245,125,70)',
     //backgroundColor:'rgb(25,30,150)',
-    marginTop:100,
+    marginTop:20,
     
-    //alignSelf:'center'
 },
 txtSignin:{
-    fontWeight:'800',
-    color:'white'
+    fontWeight:'600',
+    color:'white',
+    fontSize:18,
 },
 txtDont:{
+  fontSize:16,
     textAlign:'center',
     margin:10,
     fontWeight:'600'
 },
 txtSignup:{
     color:'rgb(245,125,70)',
-    fontWeight:'800'
+    fontWeight:'800',
+    fontSize:18,
 }
 });
