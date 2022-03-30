@@ -1,46 +1,46 @@
-import React, {useCallback, useState, useLayoutEffect, useEffect,} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
-import {auth, db} from '../../../firebase';
+import React, {useCallback, useState, useLayoutEffect, useEffect} from 'react';
+import {View, Text, TouchableOpacity, Alert, StyleSheet} from 'react-native';
+import { auth,db, firebaseConfig} from '../../../firebase';
 import {signOut} from 'firebase/auth';
+// import  firebase from '@react-native-firebase/app';
 import {
   collection,
   addDoc,
   query,
   orderBy,
   onSnapshot,
+  
 } from 'firebase/firestore';
 import {GiftedChat, IMessage} from 'react-native-gifted-chat';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import styles from './styleChat'
-import { useSelector } from 'react-redux';
- import  firestore  from '@react-native-firebase/firestore'
-
-
-import uuid from 'react-native-uuid';
+import styles from './styleChat';
+import {useSelector} from 'react-redux';
+import firestore, { firebase } from '@react-native-firebase/firestore'
 
 
 interface inputProps {
-    navigation:any;
-    route:any,
-    uid:any
+  navigation: any;
+  route: any;
+  uid: any;
 }
 
 const ChatScreen = (newProps: inputProps) => {
-  const {navigation,route,uid} = newProps;
+  const {navigation, route, uid} = newProps;
+  const [mydb, setDb] = useState('');
+  const [roomData, setRoomData] = useState([{}]);
 
-  const {name} = route.params
+  const {name} = route.params;
 
-  const user =  useSelector((state:any)=>state.data)
+  const user1 = useSelector((state: any) => state.data);
 
   // console.log("name",name)
   // console.log("user",user)
 
-  let dbName = name + " " +  user
+  // let dbName = name + " " +  user
 
   // const {email,id} = user
 
-  console.log("dbname",user)
-
+  // console.log("dbname",user)
 
   const [messages, setMessages] = useState<any>([]);
   const signOutNow = () => {
@@ -84,83 +84,116 @@ const ChatScreen = (newProps: inputProps) => {
       ),
     });
 
- 
-
-
-    const q = query(collection(db, dbName), orderBy('id'));
+    const q = query(collection(db, 'messages'));
     const unsubscribe = onSnapshot(q, snapshot =>
       setMessages(
         snapshot.docs.map(doc => ({
-          _id: doc.data()._id,
-          createdAt: doc.data().createdAt.toDate(),
-          text: doc.data().text,
-          user: doc.data().user,
+          //roomId: doc.data().roomId,
+          _id: doc.data().tempMsg._id,
+          createdAt: doc.data().tempMsg.createdAt,
+          text: doc.data().tempMsg.text,
+          user: doc.data().tempMsg.user,
         })),
       ),
     );
+
+    console.log('rooomsDB', roomData);
+
+    // const q = query(collection(db, "TC5CXyY4BoShQWbhh0l41rVxHDx1f146st7ZWFXpgIMbTsYPuDI2Z472"));
+    // const unsubscribe = onSnapshot(q, snapshot =>
+    //   setMessages(
+    //     snapshot.docs.map(doc => ({
+    //       _id: doc.data().tempMsg._id,
+    //       createdAt: doc.data().tempMsg.createdAt,
+    //       text: doc.data().tempMsg.text,
+    //       user: doc.data().tempMsg.user,
+    //     })),
+    //   ),
+    // );
 
     return () => {
       unsubscribe();
     };
   }, [navigation]);
 
+
+  useEffect(() => {
+
+
+    
+
+  //  let data = getFirestore()
+  //  console.log("daaaaa",data)
+  
+   
+  }, [])
+  
+
   const onSend = useCallback((messages = []) => {
+
+
+
+    
 
     // const id = uuid.v4(); // ⇨ '11edc52b-2918-4d71-9058-f7285e29d894'
     // console.log('roomid', id);
 
     // addDoc(collection(db,dbName),{})
 
-
-
     // console.log('msg', messages);
     // setMessages((previousMessages: IMessage[] | undefined) =>
-   
-    // const {_id, createdAt, text, user} = messages[0];
+
+    const {_id, createdAt, text, user} = messages[0];
 
     // addDoc(collection(db, dbName), {_id, createdAt,id ,text, user});
 
-
-    const msg = messages[0]
+    const msg = messages[0];
+    // let  user1 =  useSelector((state:any)=>state.data)
+    // console.log("asdsadas")
 
     const tempMsg = {
       ...msg,
-      sentBy:user.uid,
-      sentForm:uid,
-      createdAt:new Date()
-    }
-
-      setMessages((previousMessages : IMessage[] | undefined ) => GiftedChat.append(previousMessages,tempMsg))
-    const docId = uid > user.uid ? user.uid + "-" + uid : uid + "-"+ user.uid
-      // firestore().collection('chatrooms')
-      // .doc(docId)
-      // .collection('messages')
-      // .add(tempMsg)
-          const {_id, createdAt, text, user} = messages[0];
+      sentBy: user1.uid,
+      sentForm: uid,
+      createdAt: new Date(),
+    };
 
 
-          addDoc(collection(db, "messages"), { _id,createdAt,text, user,    sentBy:user.uid,
-            sentForm:uid,
-            createdAt:new Date()});
 
+    console.log('newMsg', tempMsg);
 
-    console.log("msg",msg)
+    setMessages((previousMessages: IMessage[] | undefined) =>
+      GiftedChat.append(previousMessages, {_id, createdAt, text, user}),
+    );
+    const docId =
+      uid > user1.uid ? user1.uid + '-' + uid : uid + '-' + user1.uid;
+    
 
-  }, []);
+      firebase.initializeApp(firebaseConfig)
+      
+      firestore().collection("chatrooms").doc(docId).collection('messages').add(tempMsg)
 
-  useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-    ]);
+    // let to = user1.uid;
+    // let from = uid;
+
+    // let roomId = to + from;
+    // console.log('roomid', mydb);
+    // let reverseid = from + to;
+
+    // roomData.map(item => {
+    //   console.log("idd==>",roomId)
+    //   console.log("rId",reverseid)
+    //   if (item == roomId || item == reverseid) {
+    //     console.log('db hai');
+    //   } else {
+    //     console.log('not exist');
+    //   }
+    // });
+
+    // addDoc(collection(db, "messages"), {tempMsg});
+    // addDoc(collection(db, 'roomId'), {docId});
+
+    // console.log("msg",msg)
   }, []);
 
 
@@ -173,9 +206,10 @@ const ChatScreen = (newProps: inputProps) => {
           showAvatarForEveryMessage={true}
           onSend={messages => onSend(messages)}
           user={{
-            _id: auth?.currentUser?.email||'',
-            name: auth?.currentUser?.displayName||'',
-            avatar: auth?.currentUser?.photoURL||'',
+            _id: auth?.currentUser?.uid || '',
+            name: auth?.currentUser?.displayName || '',
+            avatar: auth?.currentUser?.photoURL || '',
+            //uid:auth?.currentUser?.uid || ''
           }}
           isTyping={true}
         />
@@ -185,3 +219,7 @@ const ChatScreen = (newProps: inputProps) => {
 };
 
 export default ChatScreen;
+
+
+
+
